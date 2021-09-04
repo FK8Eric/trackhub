@@ -1,0 +1,17 @@
+// @flow
+
+declare module '@apollo/client' {
+  declare export class InMemoryCache {}
+  declare export class ApolloClient {
+    constructor({ uri: string, cache: InMemoryCache }): ApolloClient,
+  }
+  declare export var ApolloProvider: Class<React$Component<any, any>>
+  declare type DocumentNode = {}
+  declare export var gql: (string[]) => DocumentNode
+  declare type QueryResult<T> = {
+    loading: boolean,
+    data: ?T,
+    error: ?Error,
+  }
+  declare export var useQuery: <T>(DocumentNode) => QueryResult<T>
+}

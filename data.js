@@ -1,3 +1,5 @@
+// @flow
+
 export const tracks = [
   {
     id: 'buttonwillow',

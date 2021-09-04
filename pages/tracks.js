@@ -1,8 +1,12 @@
+// @flow
+import React, { type ComponentType } from 'react';
 import Page from '../components/Page';
 
 import { desktopWidth } from '../styling';
 
-const Tracks = () => {
+type Props = {};
+
+const Tracks: ComponentType<Props> = () => {
     return (
         <Page title="Tracks">
             <h1>Tracks</h1>

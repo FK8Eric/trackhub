@@ -1,8 +1,11 @@
-import React from 'react';
+// @flow
+import React, { type ComponentType } from 'react';
 
 import Page from '../components/Page';
 
-const BeginnersGuide = () => {
+type Props = {};
+
+const BeginnersGuide: ComponentType<Props> = () => {
   return (
     <Page title="Beginner's Guide">
         <h1>The Track: A guide for beginners</h1>

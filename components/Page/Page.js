@@ -1,9 +1,28 @@
+// @flow
+import React, { type ComponentType, type Node } from 'react';
 import Head from 'next/head';
+import { gql, useQuery } from '@apollo/client';
 
 import Header from '../Header';
 import { desktopWidth } from '../../styling';
 
-const Page = ({ children, title }) => {
+const query = gql`
+    query {
+        currentUser {
+            id
+        }
+    }
+`;
+
+type Props = {
+    children: Node,
+    title: string,
+};
+
+const Page: ComponentType<Props> = ({ children, title }) => {
+    const { data } = useQuery(query);
+    console.log(data);
+
     return (
         <div className="container">
             <Head>

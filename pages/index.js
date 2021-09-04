@@ -1,4 +1,5 @@
-import { useState } from 'react';
+// @flow
+import React, { useState, type ComponentType } from 'react';
 
 import Page from '../components/Page';
 import { desktopWidth } from '../styling';
@@ -39,7 +40,9 @@ const initialFilters = () => {
   return [];
 };
 
-const Home = () => {
+type Props = {};
+
+const Home: ComponentType<Props> = () => {
   const [filters, setFilters] = useState(initialFilters());
 
   return (
