@@ -1,5 +1,19 @@
+// @flow
 import { useContext, createContext } from 'react';
 
-const TrackHubStateContext = createContext();
+type UserId = string;
+type User = {
+    id: UserId,
+};
 
-export const useTrackHubState = () => useContext(TrackHubStateContext);
+type TrackHubState = {
+    user: ?User,
+};
+
+const initialTrackHubState = {
+    user: null,
+};
+
+const TrackHubStateContext = createContext(initialTrackHubState);
+
+export const useTrackHubState = (): TrackHubState => useContext(TrackHubStateContext);

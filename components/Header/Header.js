@@ -1,36 +1,40 @@
+// @flow
+import React, { type Node, type ComponentType } from 'react';
 import Link from 'next/link';
 
 import { desktopWidth } from '../../styling';
 
 const navbarItemPadding = `0.625em`;
 
-const Header = () => {
+type Props = {};
+
+const Header: ComponentType<Props> = () => {
     return (
         <>
-        <nav className="navbar">
-            <ul className="list-reset navbar-items">
-                <li className="navbar-item">
-                    <Link href="/">
-                        TrackHub
-                    </Link>
-                    {' '} - SoCal
-                </li>
-                <li className="navbar-item">
-                    <Link href="/tracks">
-                        Tracks
-                    </Link>
-                </li>
-                <li className="navbar-item">
-                    <Link href="/beginners-guide">
-                        Beginner's Guide
-                    </Link>
-                </li>
-                <li className="navbar-item navbar-expander">
-                    <button>Menu</button>
-                </li>
-            </ul>
-        </nav>
-        <p>The platform for track enthusiasts.</p>
+            <nav className="navbar">
+                <ul className="list-reset navbar-items">
+                    <li className="navbar-item">
+                        <Link href="/">
+                            TrackHub
+                        </Link>
+                        {' '} - SoCal
+                    </li>
+                    <li className="navbar-item">
+                        <Link href="/tracks">
+                            Tracks
+                        </Link>
+                    </li>
+                    <li className="navbar-item">
+                        <Link href="/beginners-guide">
+                            Beginner's Guide
+                        </Link>
+                    </li>
+                    <li className="navbar-item navbar-expander">
+                        <button>Menu</button>
+                    </li>
+                </ul>
+            </nav>
+            <p>The platform for track enthusiasts.</p>
 
             <style jsx>{`
                 .navbar-items {

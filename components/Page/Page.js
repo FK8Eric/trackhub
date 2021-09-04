@@ -1,9 +1,16 @@
+// @flow
+import React, { type ComponentType, type Node } from 'react';
 import Head from 'next/head';
 
 import Header from '../Header';
 import { desktopWidth } from '../../styling';
 
-const Page = ({ children, title }) => {
+type Props = {
+    children: Node,
+    title: string,
+};
+
+const Page: ComponentType<Props> = ({ children, title }) => {
     return (
         <div className="container">
             <Head>

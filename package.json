@@ -5,11 +5,18 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "flow": "flow",
     "start": "next start"
   },
   "dependencies": {
     "next": "^11.0.0",
     "react": "17.0.2",
     "react-dom": "17.0.2"
+  },
+  "devDependencies": {
+    "babel-plugin-transform-flow-strip-types": "6.22.0",
+    "eslint": "7.30.0",
+    "eslint-config-next": "latest",
+    "flow-bin": "^0.159.0"
   }
 }
