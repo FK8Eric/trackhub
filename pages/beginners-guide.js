@@ -1,5 +1,6 @@
 import React from 'react';
-import Page from '../src/components/Page/Page';
+
+import Page from '../components/Page';
 
 const BeginnersGuide = () => {
   return (

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+
 import { desktopWidth } from '../../styling';
 
 const navbarItemPadding = `0.625em`;

@@ -1,6 +1,6 @@
-import Head from 'next/head';
-import Page from '../src/components/Page/Page';
-import { desktopWidth } from '../src/styling';
+import Page from '../components/Page';
+
+import { desktopWidth } from '../styling';
 
 const Tracks = () => {
     return (

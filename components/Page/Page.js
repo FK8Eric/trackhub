@@ -1,5 +1,6 @@
 import Head from 'next/head';
-import Header from '../Header/Header';
+
+import Header from '../Header';
 import { desktopWidth } from '../../styling';
 
 const Page = ({ children, title }) => {

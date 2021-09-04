@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import Head from 'next/head';
-import Page from '../src/components/Page/Page';
-import { desktopWidth } from '../src/styling';
-import { tracks, organizers } from '../src/data';
+
+import Page from '../components/Page';
+import { desktopWidth } from '../styling';
+import { tracks, organizers } from '../data';
 
 const UpcomingEvents = ({ events }) => {
   return (
