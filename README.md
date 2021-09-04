@@ -1,1 +1,3 @@
-This is a starter template for [Learn Next.js](https://nextjs.org/learn).
+# TrackHub
+
+A Next.js app for TrackHub's website.
