@@ -12,7 +12,7 @@
     "computed-property-spacing": ["error", "never"],
     "react/jsx-uses-react": "error",
     "react/jsx-uses-vars": "error",
-    "no-unused-vars": ["warn", { "varsIgnorePattern": "^_", "argsIgnorePattern": "^_" }],
+    "no-unused-vars": ["warn", { "varsIgnorePattern": "^_", "argsIgnorePattern": "(^_)|(^args$)|(^parent$)" }],
     "comma-dangle": ["error", "always-multiline"]
   }
 }

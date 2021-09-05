@@ -197,7 +197,7 @@ const resolvers = {
                 url: authUrl,
             };
         },
-        regions: (parent, { filters }) => {
+        regions: (parent, args) => {
             return getRegions().map(({ id }) => ({ id }));
         },
         region: (parent, { regionId }) => {

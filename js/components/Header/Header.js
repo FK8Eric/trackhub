@@ -16,7 +16,7 @@ const Header: ComponentType<Props> = () => {
                 <ul className="list-reset navbar-items">
                     <li className="navbar-item">
                         <Link href="/">
-                            TrackHub
+                            <img alt="trackhub-logo" className="trackhub-logo" src="https://cdn.discordapp.com/attachments/808593435933016065/883877324112670810/Jaseowns_PH_Logo.jpg" />
                         </Link>
                         {' '} - SoCal
                     </li>
@@ -39,6 +39,10 @@ const Header: ComponentType<Props> = () => {
             <GoogleAuth />
 
             <style jsx>{`
+                .trackhub-logo {
+                    width: 9em;
+                }
+
                 .navbar-items {
                     display: flex;
                     margin-left: -${navbarItemPadding};
