@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "flow": "flow",
-    "start": "next start"
+    "start": "next start -p 80"
   },
   "dependencies": {
     "@apollo/client": "^3.4.10",
