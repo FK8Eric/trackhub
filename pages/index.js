@@ -5,7 +5,7 @@ import Page from '../js/components/Page';
 import { desktopWidth } from '../js/styling';
 import { tracks, organizers } from '../js/data';
 
-const UpcomingEvents = ({ events }) => {
+const UpcomingEvents = ({ events: _events }) => {
     return (
         <ol className="list-reset">
         </ol>
@@ -31,7 +31,7 @@ const Filter = ({ name, options }) => {
     );
 };
 
-const filtersConfig = [
+const _filtersConfig = [
     { id: 'tracks', name: 'Tracks', options: tracks, defaultValue: true },
     { id: 'organizers', name: 'Organizers', options: organizers, defaultValue: true },
 ];
@@ -43,7 +43,7 @@ const initialFilters = () => {
 type Props = {};
 
 const Home: ComponentType<Props> = () => {
-    const [filters, setFilters] = useState(initialFilters());
+    const [filters, _setFilters] = useState(initialFilters());
 
     return (
         <Page title="TrackHub - SoCal">

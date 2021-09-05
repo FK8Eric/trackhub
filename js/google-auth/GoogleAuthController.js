@@ -6,7 +6,6 @@ import { gql } from '@apollo/client';
 import type {
     GoogleAuth,
     GoogleAuthContextValue,
-    IdToken,
 } from './google-auth-context';
 import { GoogleAuthContext } from './google-auth-context';
 import StateContext from '../StateContext';
@@ -37,7 +36,7 @@ type AuthState = {
 
 const GoogleAuthController: ComponentType<Props> = ({ children }) => {
     const stateContext = useContext(StateContext);
-    const [authState, setAuthState] = useState<?AuthState>(null);
+    const [_authState, setAuthState] = useState<?AuthState>(null);
     const [contextValue, setContextValue] = useState<GoogleAuthContextValue>(null);
 
     return (

@@ -1,5 +1,5 @@
 // @flow
-import React, { type ComponentType, useEffect } from 'react';
+import { type ComponentType, useEffect } from 'react';
 
 type Props = {}
 

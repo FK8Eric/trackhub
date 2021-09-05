@@ -1,12 +1,9 @@
 import { gql, ApolloServer } from 'apollo-server-micro';
 import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
-import { google } from 'googleapis';
 import {
     authUrl,
     authenticate,
-    createOauth2Client,
 } from '../../js/backend/oauth/google';
-import appConfig from '../../js/backend/appConfig';
 
 const typeDefs = gql`
   type User {
@@ -51,7 +48,7 @@ const resolvers = {
                 id: 'Foo',
             };
         },
-        auth: (parent, args) => {
+        auth: (_parent, _args) => {
             return {
                 url: authUrl,
             };

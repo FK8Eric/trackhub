@@ -1,6 +1,5 @@
 // @flow
-import React, { useState, type ComponentType, type AbstractComponent } from 'react';
-import Head from 'next/head';
+import React, { type ComponentType, type AbstractComponent } from 'react';
 import { ApolloProvider } from '@apollo/client';
 
 import GoogleAuthController from '../js/google-auth/GoogleAuthController';
@@ -15,8 +14,6 @@ type Props = {
 };
 
 const App: ComponentType<Props> = ({ Component, PageProps }: Props) => {
-    const [gapi, setGapi] = useState(null);
-    console.log(gapi);
     return (
         <StateController>
             <GoogleAuthController>

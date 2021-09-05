@@ -1,5 +1,5 @@
 // @flow
-import React, { useState, createContext, useContext, type Context, type ComponentType, type AbstractComponent } from 'react';
+import { createContext, type Context } from 'react';
 
 // TODO(flow)
 export type IdToken = any;

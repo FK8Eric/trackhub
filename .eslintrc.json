@@ -1,5 +1,6 @@
 {
-  "extends": "next",
+  "extends": ["next"],
+  "plugins": ["react"],
   "rules": {
     "semi": ["error", "always"],
     "jsx-quotes": ["error", "prefer-double"],
@@ -8,6 +9,9 @@
     "indent": ["error", 4],
     "object-curly-spacing": ["error", "always"],
     "array-bracket-spacing": ["error", "never"],
-    "computed-property-spacing": ["error", "never"]
+    "computed-property-spacing": ["error", "never"],
+    "react/jsx-uses-react": "error",
+    "react/jsx-uses-vars": "error",
+    "no-unused-vars": ["error", { "varsIgnorePattern": "^_", "argsIgnorePattern": "^_" }]
   }
 }
