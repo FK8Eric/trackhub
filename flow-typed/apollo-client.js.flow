@@ -14,5 +14,5 @@ declare module '@apollo/client' {
     data: ?T,
     error: ?Error,
   }
-  declare export var useQuery: <T>(DocumentNode) => QueryResult<T>
+  declare export var useQuery: <T>(DocumentNode, any) => QueryResult<T> // TODO(flow)
 }
