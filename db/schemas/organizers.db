@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS organizers (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255),
+  phone_number VARCHAR(255),
+  address VARCHAR(255),
+  facebook_page VARCHAR(255),
+  instagram VARCHAR(255)
+);
