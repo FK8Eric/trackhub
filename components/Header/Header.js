@@ -1,8 +1,9 @@
 // @flow
-import React, { type Node, type ComponentType } from 'react';
+import React, { type ComponentType } from 'react';
 import Link from 'next/link';
 
 import { desktopWidth } from '../../styling';
+import GoogleAuth from "../GoogleAuth/GoogleAuth";
 
 const navbarItemPadding = `0.625em`;
 
@@ -35,6 +36,7 @@ const Header: ComponentType<Props> = () => {
                 </ul>
             </nav>
             <p>The platform for track enthusiasts.</p>
+            <GoogleAuth />
 
             <style jsx>{`
                 .navbar-items {

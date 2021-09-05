@@ -19,6 +19,12 @@ declare module 'next/link' {
   >
 }
 
+declare module 'next/script' {
+  declare module.exports: Class<
+    React$Component<{ src: string, onLoad: () => void }, any>
+  >
+}
+
 declare module 'next/error' {
   declare module.exports: Class<React$Component<{ statusCode: number }, any>>
 }

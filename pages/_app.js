@@ -1,8 +1,11 @@
 // @flow
-import React, { type ComponentType, type AbstractComponent } from 'react';
+import React, { useState, type ComponentType, type AbstractComponent } from 'react';
+import Head from 'next/head';
 import { ApolloProvider } from '@apollo/client';
 
 import client from '../apollo-client';
+import StateController from "../components/StateController/StateController";
+import GoogleAuthController from "../google-auth/GoogleAuthController";
 
 type PageProps = {};
 
@@ -12,10 +15,16 @@ type Props = {
 };
 
 const App: ComponentType<Props> = ({ Component, PageProps }: Props) => {
+    const [gapi, setGapi] = useState(null);
+    console.log(gapi);
     return (
-        <ApolloProvider client={client}>
-            <Component {...PageProps} />
-        </ApolloProvider>
+        <StateController>
+            <GoogleAuthController>
+                <ApolloProvider client={client}>
+                    <Component {...PageProps} />
+                </ApolloProvider>
+            </GoogleAuthController>
+        </StateController>
     );
 };
 
