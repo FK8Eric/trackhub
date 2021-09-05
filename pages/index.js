@@ -20,7 +20,7 @@ const Filter = ({ name, options }) => {
         {options.map((option) =>
           <li key={option.name} className="filter-option">
             <input type="checkbox" name={option.name} value={option.name} />
-            <label for={option.name}>{option.name}</label>
+            <label htmlFor={option.name}>{option.name}</label>
           </li>
         )}
       </ul>

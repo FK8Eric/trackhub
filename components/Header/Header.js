@@ -26,7 +26,7 @@ const Header: ComponentType<Props> = () => {
                     </li>
                     <li className="navbar-item">
                         <Link href="/beginners-guide">
-                            Beginner's Guide
+                            Beginner&apos;s Guide
                         </Link>
                     </li>
                     <li className="navbar-item navbar-expander">
