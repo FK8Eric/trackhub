@@ -1,7 +1,7 @@
 // @flow
 import React, { type ComponentType } from 'react';
 
-import Page from '../components/Page';
+import Page from "../js/components/Page/Page";
 
 type Props = {};
 

@@ -1,9 +1,9 @@
 // @flow
 import React, { useState, type ComponentType } from 'react';
 
-import Page from '../components/Page';
-import { desktopWidth } from '../styling';
-import { tracks, organizers } from '../data';
+import Page from '../js/components/Page';
+import { desktopWidth } from '../js/styling';
+import { tracks, organizers } from '../js/data';
 
 const UpcomingEvents = ({ events }) => {
   return (
