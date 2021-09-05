@@ -1,65 +1,65 @@
 // @flow
 import React, { useState, type ComponentType } from 'react';
 
-import Page from '../components/Page';
-import { desktopWidth } from '../styling';
-import { tracks, organizers } from '../data';
+import Page from '../js/components/Page';
+import { desktopWidth } from '../js/styling';
+import { tracks, organizers } from '../js/data';
 
 const UpcomingEvents = ({ events }) => {
-  return (
-    <ol className="list-reset">
-    </ol>
-  );
+    return (
+        <ol className="list-reset">
+        </ol>
+    );
 };
 
 const Filter = ({ name, options }) => {
-  return (
-    <>
-      <span>{name}:{' '}</span>
-      <ul className="list-reset filter-options">
-        {options.map((option) =>
-          <li key={option.name} className="filter-option">
-            <input type="checkbox" name={option.name} value={option.name} />
-            <label htmlFor={option.name}>{option.name}</label>
-          </li>
-        )}
-      </ul>
+    return (
+        <>
+            <span>{name}:{' '}</span>
+            <ul className="list-reset filter-options">
+                {options.map((option) =>
+                    <li key={option.name} className="filter-option">
+                        <input type="checkbox" name={option.name} value={option.name} />
+                        <label htmlFor={option.name}>{option.name}</label>
+                    </li>
+                )}
+            </ul>
 
-      <style jsx global>{`
+            <style jsx global>{`
       `}</style>
-    </>
-  );
+        </>
+    );
 };
 
 const filtersConfig = [
-  { id: 'tracks', name: 'Tracks', options: tracks, defaultValue: true },
-  { id: 'organizers', name: 'Organizers', options: organizers, defaultValue: true },
+    { id: 'tracks', name: 'Tracks', options: tracks, defaultValue: true },
+    { id: 'organizers', name: 'Organizers', options: organizers, defaultValue: true },
 ];
 
 const initialFilters = () => {
-  return [];
+    return [];
 };
 
 type Props = {};
 
 const Home: ComponentType<Props> = () => {
-  const [filters, setFilters] = useState(initialFilters());
+    const [filters, setFilters] = useState(initialFilters());
 
-  return (
-    <Page title="TrackHub - SoCal">
-      <h1>Upcoming HPDE Events</h1>
-      <section id="filters" className="filters">
-        {filters.map((filter) =>
-          <div className="filter" key={filter.name}>
-            <Filter {...filter} />
-          </div>
-        )}
-      </section>
-      <section id="upcoming-events">
-        <UpcomingEvents events={[]} />
-      </section>
+    return (
+        <Page title="TrackHub - SoCal">
+            <h1>Upcoming HPDE Events</h1>
+            <section id="filters" className="filters">
+                {filters.map((filter) =>
+                    <div className="filter" key={filter.name}>
+                        <Filter {...filter} />
+                    </div>
+                )}
+            </section>
+            <section id="upcoming-events">
+                <UpcomingEvents events={[]} />
+            </section>
 
-      <style jsx>{`
+            <style jsx>{`
         .filters {
           display: flex;
           flex-direction: column;
@@ -75,8 +75,8 @@ const Home: ComponentType<Props> = () => {
           margin-right: 1em;
         }
       `}</style>
-    </Page>
-  );
+        </Page>
+    );
 };
 
 export default Home;

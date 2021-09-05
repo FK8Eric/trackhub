@@ -6,9 +6,9 @@ import type {
   GoogleAuth,
   GoogleAuthContextValue,
   IdToken,
-} from "./google-auth-context";
-import { GoogleAuthContext } from "./google-auth-context";
-import StateContext from "../StateContext";
+} from './google-auth-context';
+import { GoogleAuthContext } from './google-auth-context';
+import StateContext from '../js/StateContext';
 
 const SCOPE = 'profile';
 

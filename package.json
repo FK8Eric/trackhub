@@ -6,11 +6,14 @@
     "dev": "next dev",
     "build": "next build",
     "flow": "flow",
-    "start": "next start"
+    "start": "next start -p 80",
+    "test": "eslint \"js/**\" \"pages/**\"",
+    "lint": "eslint --fix \"js/**\" \"pages/**\""
   },
   "dependencies": {
     "@apollo/client": "^3.4.10",
     "apollo-server-micro": "^3.3.0",
+    "googleapis": "^85.0.0",
     "graphql": "^15.5.2",
     "micro": "^9.3.4",
     "next": "^11.0.0",

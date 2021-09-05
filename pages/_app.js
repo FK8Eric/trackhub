@@ -3,9 +3,9 @@ import React, { useState, type ComponentType, type AbstractComponent } from 'rea
 import Head from 'next/head';
 import { ApolloProvider } from '@apollo/client';
 
-import client from '../apollo-client';
-import StateController from "../components/StateController/StateController";
-import GoogleAuthController from "../google-auth/GoogleAuthController";
+import GoogleAuthController from '../google-auth/GoogleAuthController';
+import StateController from '../js/components/StateController';
+import client from '../js/apollo-client';
 
 type PageProps = {};
 

@@ -1,9 +1,7 @@
 // @flow
 import React, { useState, type ComponentType, type Node } from 'react';
 
-import StateContext, { initialState } from "../../StateContext";
-
-import type { User } from "../../types/user";
+import StateContext, { initialState } from '../../StateContext';
 
 type Props = {
     children: Node,
@@ -18,7 +16,7 @@ const StateController: ComponentType<Props> = ({ children }: Props) => {
         }}>
             {children}
         </StateContext.Provider>
-    )
+    );
 };
 
 export default StateController;
