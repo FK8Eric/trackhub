@@ -4,6 +4,7 @@ declare module '@apollo/client' {
   declare export class InMemoryCache {}
   declare export class ApolloClient {
     constructor({ uri: string, cache: InMemoryCache }): ApolloClient,
+    query(any): any, // TODO(flow)
   }
   declare export var ApolloProvider: Class<React$Component<any, any>>
   declare type DocumentNode = {}

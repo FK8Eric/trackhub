@@ -5,6 +5,9 @@
     "jsx-quotes": ["error", "prefer-double"],
     "quotes": ["error", "single"],
     "no-mixed-spaces-and-tabs": "error",
-    "indent": ["error", 4]
+    "indent": ["error", 4],
+    "object-curly-spacing": ["error", "always"],
+    "array-bracket-spacing": ["error", "never"],
+    "computed-property-spacing": ["error", "never"]
   }
 }

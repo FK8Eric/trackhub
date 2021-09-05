@@ -1,6 +1,7 @@
 // @flow
 import React, { useState, createContext, useContext, type Context, type ComponentType, type AbstractComponent } from 'react';
 
+// TODO(flow)
 export type IdToken = any;
 
 type GoogleUser = {

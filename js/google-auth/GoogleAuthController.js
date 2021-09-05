@@ -1,16 +1,30 @@
 // @flow
 import React, { useContext, useState, type ComponentType, type Node } from 'react';
 import Script from 'next/script';
+import { gql } from '@apollo/client';
 
 import type {
-  GoogleAuth,
-  GoogleAuthContextValue,
-  IdToken,
+    GoogleAuth,
+    GoogleAuthContextValue,
+    IdToken,
 } from './google-auth-context';
 import { GoogleAuthContext } from './google-auth-context';
-import StateContext from '../js/StateContext';
+import StateContext from '../StateContext';
+import client from '../apollo-client';
 
 const SCOPE = 'profile';
+
+const AUTHENTICATE_QUERY = gql`
+    query Authenticate($idToken: String!) {
+        auth {
+            authenticate(idToken: $idToken) {
+                user {
+                    id
+                }
+            }
+        }
+    }
+`;
 
 type Props = {
     children: Node,
@@ -42,9 +56,9 @@ const GoogleAuthController: ComponentType<Props> = ({ children }) => {
                             gapi,
                             googleAuth,
                         });
-                        const setSignInStatus = () => {
+                        const setSignInStatus = async () => {
                             const currentUser = googleAuth.currentUser.get();
-                            const isAuthorized = currentUser.hasGrantedScopes(SCOPE)
+                            const isAuthorized = currentUser.hasGrantedScopes(SCOPE);
                             if (!isAuthorized) {
                                 stateContext.setState(state => ({
                                     ...state,
@@ -54,15 +68,17 @@ const GoogleAuthController: ComponentType<Props> = ({ children }) => {
                             }
                             const { id_token } = currentUser.getAuthResponse();
                             const email = currentUser.getBasicProfile().getEmail();
+                            const { data } = await client.query({ query: AUTHENTICATE_QUERY, variables: { idToken: id_token } });
                             stateContext.setState(state => ({
                                 ...state,
                                 user: {
+                                    id: data.auth.authenticate.user.id,
                                     email,
                                 },
                             }));
                         };
                         googleAuth.isSignedIn.listen((isSignedIn) => {
-                            console.log('isSignedIn event:', isSignedIn)
+                            console.log('isSignedIn event:', isSignedIn);
                             setSignInStatus();
                         });
                         setContextValue({
@@ -77,7 +93,7 @@ const GoogleAuthController: ComponentType<Props> = ({ children }) => {
             }} />
             {children}
         </GoogleAuthContext.Provider>
-    )
+    );
 };
 
 export default GoogleAuthController;

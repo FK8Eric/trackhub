@@ -31,3 +31,6 @@ yarn-error.log*
 
 # secret config
 /config.secret.json
+
+# development db
+/db.json

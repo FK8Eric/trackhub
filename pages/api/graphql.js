@@ -1,21 +1,25 @@
 import { gql, ApolloServer } from 'apollo-server-micro';
 import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
 import { google } from 'googleapis';
-import configJson from '../../config.json';
-import secretConfigJson from '../../config.secret.json';
-
-const appConfig = {
-    ...configJson,
-    ...secretConfigJson,
-};
+import {
+    authUrl,
+    authenticate,
+    createOauth2Client,
+} from '../../js/backend/oauth/google';
+import appConfig from '../../js/backend/appConfig';
 
 const typeDefs = gql`
   type User {
     id: ID
   }
 
+  type AuthResult {
+    user: User
+  }
+
   type Auth {
     url: String
+    authenticate(idToken: String!): AuthResult
   }
 
   type Query {
@@ -25,22 +29,21 @@ const typeDefs = gql`
   }
 `;
 
-const oauth2Client = new google.auth.OAuth2(
-    '301960945914-cees61pu2lrafj8nm7e5lbgn1v23oum0.apps.googleusercontent.com',
-    appConfig.GOOGLE_CLIENT_SECRET,
-    'http://localhost:3000/oauth/google',
-);
-const scopes = ['profile'];
-const authUrl = oauth2Client.generateAuthUrl({
-    access_type: 'online',
-    scope: scopes,
-});
-
 const resolvers = {
-    Query: {
-        user: (parent, args) => {
+    Auth: {
+        authenticate: async (parent, { idToken }) => {
+            const googleUser = await authenticate(idToken);
             return {
-                id: args.id,
+                user: {
+                    id: googleUser.user_id,
+                },
+            };
+        },
+    },
+    Query: {
+        user: (parent, { id }) => {
+            return {
+                id,
             };
         },
         currentUser: () => {
@@ -48,7 +51,7 @@ const resolvers = {
                 id: 'Foo',
             };
         },
-        auth: () => {
+        auth: (parent, args) => {
             return {
                 url: authUrl,
             };
