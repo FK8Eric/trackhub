@@ -9,6 +9,7 @@ import { tracks, organizers } from '../js/data';
 const GET_UPCOMING_EVENTS_QUERY = gql`
     query GetUpcomingEvents($regionId: ID!) {
         region(regionId: $regionId) {
+            id
             organizers {
                 id
                 name
@@ -22,6 +23,23 @@ const GET_UPCOMING_EVENTS_QUERY = gql`
                 id
                 track {
                     id
+                }
+            }
+        }
+    }
+`;
+
+const GET_EVENT_FILTERS_QUERY = gql`
+    query GetEventFilters($regionId: ID!) {
+        region(regionId: $regionId) {
+            id
+            eventFilters {
+                id
+                name
+                initialValues {
+                    id
+                    name
+                    checked
                 }
             }
         }
@@ -66,12 +84,35 @@ const initialFilters = () => {
     };
 };
 
+const Filters = ({ regionId }) => {
+    const { loading, error, data } = useQuery(GET_EVENT_FILTERS_QUERY, {
+        variables: { regionId },
+    });
+    if (error) {
+        console.log(error);
+        return null;
+    }
+    if (loading || !data) {
+        return null;
+    }
+
+    return data.region.eventFilters.map(eventFilter =>
+        <div className="filter" key={eventFilter.id}>
+            <Filter name={eventFilter.name} options={eventFilter.initialValues.map(({ id, name, checked }) => ({
+                name,
+                selected: checked,
+            }))} />
+        </div>
+    );
+};
+
 type Props = {};
 
 const Home: ComponentType<Props> = () => {
+    const regionId = 'socal';
     const [filters, _setFilters] = useState(initialFilters());
     const { loading, error, data } = useQuery(GET_UPCOMING_EVENTS_QUERY, {
-        variables: { regionId: 'socal' },
+        variables: { regionId },
     });
     console.log(data);
 
@@ -79,14 +120,7 @@ const Home: ComponentType<Props> = () => {
         <Page title="TrackHub - SoCal">
             <h1>Upcoming HPDE Events</h1>
             <section id="filters" className="filters">
-                {filtersConfig.map((filterConfig) =>
-                    <div className="filter" key={filterConfig.id}>
-                        <Filter name={filterConfig.name} options={filterConfig.options.map(({ id, name }) => ({
-                            name,
-                            selected: id in filters[filterConfig.id] ? filters[filterConfig.id][id] : filterConfig.defaultValue,
-                        }))} />
-                    </div>
-                )}
+                <Filters regionId={regionId} />
             </section>
             <section id="upcoming-events">
                 {data && JSON.stringify(data, null, '\t')}

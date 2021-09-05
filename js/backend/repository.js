@@ -34,11 +34,29 @@ const mockTracks: {[TrackId]:TrackModel} = {
         name: 'Streets of Willow',
         location: 'Rosamond, CA',
     },
+    bigwillow: {
+        id: 'bigwillow',
+        name: 'Big Willow',
+        location: 'Rosamond, CA',
+    },
+    chuckwalla: {
+        id: 'chuckwalla',
+        name: 'Chuckwalla Valley Raceway',
+        location: 'Desert Center, CA',
+    },
+    autoclubspeedway: {
+        id: 'autoclubspeedway',
+        name: 'Auto Club Speedway',
+        location: 'Fontana, CA',
+    },
 };
 
 const mockTrackRegionJoins: TrackRegionJoinModel[] = [
     { trackId: 'buttonwillow', regionId: 'socal' },
     { trackId: 'streetsofwillow', regionId: 'socal' },
+    { trackId: 'bigwillow', regionId: 'socal' },
+    { trackId: 'chuckwalla', regionId: 'socal' },
+    { trackId: 'autoclubspeedway', regionId: 'socal' },
     { trackId: 'buttonwillow', regionId: 'norcal' },
 ];
 
@@ -47,6 +65,21 @@ const mockOrganizers: {[OrganizerId]:OrganizerModel} = {
         id: 'speedventures',
         name: 'Speed Ventures',
         url: 'https://www.speedventures.com/',
+    },
+    extremespeedtrackevents: {
+        id: 'extremespeedtrackevents',
+        name: 'Extreme Speed Track Events',
+        url: 'https://www.extremespeedtrackevents.com/',
+    },
+    turn8racing: {
+        id: 'turn8racing',
+        name: 'Turn 8 Racing',
+        url: 'https://www.turn8racing.com/',
+    },
+    ongridtrack: {
+        id: 'ongrid',
+        name: 'OnGrid Track',
+        url: 'https://www.ongridtrack.com/',
     },
     speedsf: {
         id: 'speedsf',
@@ -57,6 +90,9 @@ const mockOrganizers: {[OrganizerId]:OrganizerModel} = {
 
 const mockOrganizerRegionJoins: OrganizerRegionJoinModel[] = [
     { organizerId: 'speedventures', regionId: 'socal' },
+    { organizerId: 'extremespeedtrackevents', regionId: 'socal' },
+    { organizerId: 'turn8racing', regionId: 'socal' },
+    { organizerId: 'ongridtrack', regionId: 'socal' },
     { organizerId: 'speedsf', regionId: 'norcal' },
 ];
 

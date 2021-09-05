@@ -37,7 +37,7 @@ const typeDefs = gql`
         location: String
     }
 
-    input Filter {
+    input FilterInput {
         property: String
         constraint: String
     }
@@ -55,11 +55,24 @@ const typeDefs = gql`
         date: String
     }
 
+    type EventFilterValue {
+        id: ID
+        name: String
+        checked: Boolean
+    }
+
+    type EventFilter {
+        id: ID
+        name: String
+        initialValues: [EventFilterValue]
+    }
+
     type Region {
         id: ID
         name: String
 
-        eventArray(filters: [Filter]): [Event]
+        eventFilters: [EventFilter]
+        eventArray(filters: [FilterInput]): [Event]
         organizers: [Organizer]
         tracks: [Track]
     }
@@ -68,7 +81,7 @@ const typeDefs = gql`
         user(id: ID!): User
         currentUser: User
         auth: Auth
-        regions(filters: [Filter]): [Region]
+        regions(filters: [FilterInput]): [Region]
         region(regionId: ID): Region
     }
 `;
@@ -108,6 +121,30 @@ const resolvers = {
     Region: {
         name: ({ id }, args) => {
             return getRegion(id).name;
+        },
+        eventFilters: ({ id }) => {
+            return [
+                {
+                    id: 'tracks',
+                    name: 'Tracks',
+                    initialValues: getTracks(id).map(trackModel => ({
+                        id: trackModel.id,
+                        name: trackModel.name,
+                        checked: true,
+                    })),
+                },
+                {
+                    id: 'organizers',
+                    name: 'Organizers',
+                    // TODO: Get additional organizers based on tracks in the region, not just organizers in the region
+                    // It is possible for organizers to organize one-off events outside of their usual region
+                    initialValues: getOrganizers(id).map(organizerModel => ({
+                        id: organizerModel.id,
+                        name: organizerModel.name,
+                        checked: true,
+                    })),
+                },
+            ];
         },
         eventArray:({ id }, { filters }) => {
             const processedFilters = filters.map(({ property, constraint }) => {
