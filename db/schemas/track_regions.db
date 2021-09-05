@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS track_regions (
+  track_id VARCHAR(255) NOT NULL,
+  region_id VARCHAR(255) NOT NULL,
+  PRIMARY KEY(track_id, region_id)
+);

@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS run_groups (
   id SERIAL PRIMARY KEY,
   event_id CHAR(26) NOT NULL,
+  name VARCHAR(255) NOT NULL,
   cost MONEY NOT NULL,
   experience_requirement VARCHAR(255) NOT NULL,
   passing_rules VARCHAR(255) NOT NULL

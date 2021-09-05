@@ -1,4 +1,5 @@
 CREATE TABLE IF NOT EXISTS users (
   id SERIAL PRIMARY KEY,
-  session VARCHAR(255)
+  id_token TEXT,
+  google_user_id VARCHAR(255) UNIQUE
 );
