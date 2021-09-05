@@ -18,6 +18,6 @@ const GoogleAuth: ComponentType<Props> = () => {
     return (
         <button onClick={() => googleAuthContext.onSignIn()}>Sign into Google</button>
     );
-}
+};
 
 export default GoogleAuth;

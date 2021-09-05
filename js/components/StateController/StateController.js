@@ -16,7 +16,7 @@ const StateController: ComponentType<Props> = ({ children }: Props) => {
         }}>
             {children}
         </StateContext.Provider>
-    )
+    );
 };
 
 export default StateController;
