@@ -7,7 +7,8 @@
     "build": "next build",
     "flow": "flow",
     "start": "next start -p 80",
-    "test": "eslint \"js/**\" \"pages/**\""
+    "test": "eslint \"js/**\" \"pages/**\"",
+    "lint": "eslint --fix \"js/**\" \"pages/**\""
   },
   "dependencies": {
     "@apollo/client": "^3.4.10",
