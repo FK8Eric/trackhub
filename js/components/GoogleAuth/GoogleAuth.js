@@ -1,8 +1,8 @@
 // @flow
 import React, { useContext, type ComponentType } from 'react';
 
-import StateContext from "../../StateContext";
-import { GoogleAuthContext } from "../../../google-auth/google-auth-context";
+import StateContext from '../../StateContext';
+import { GoogleAuthContext } from '../../../google-auth/google-auth-context';
 
 type Props = {};
 

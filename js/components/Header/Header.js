@@ -3,9 +3,9 @@ import React, { type ComponentType } from 'react';
 import Link from 'next/link';
 
 import { desktopWidth } from '../../styling';
-import GoogleAuth from "../GoogleAuth/GoogleAuth";
+import GoogleAuth from '../GoogleAuth/GoogleAuth';
 
-const navbarItemPadding = `0.625em`;
+const navbarItemPadding = '0.625em';
 
 type Props = {};
 

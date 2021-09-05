@@ -1,7 +1,7 @@
 // @flow
 import React, { useState, type ComponentType, type Node } from 'react';
 
-import StateContext, { initialState } from "../../StateContext";
+import StateContext, { initialState } from '../../StateContext';
 
 type Props = {
     children: Node,

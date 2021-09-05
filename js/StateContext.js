@@ -1,7 +1,7 @@
 // @flow
 import { useContext, createContext, type Context } from 'react';
 
-import type { User } from "../types/user";
+import type { User } from '../types/user';
 
 export type State = {
     user: ?User,

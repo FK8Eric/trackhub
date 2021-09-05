@@ -1,3 +1,3 @@
 // @flow
 
-export const desktopWidth = `768px`;
+export const desktopWidth = '768px';

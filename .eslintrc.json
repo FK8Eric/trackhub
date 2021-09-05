@@ -1,6 +1,10 @@
 {
   "extends": "next",
   "rules": {
-    "semi": ["error", "always"]
+    "semi": ["error", "always"],
+    "jsx-quotes": ["error", "prefer-double"],
+    "quotes": ["error", "single"],
+    "no-mixed-spaces-and-tabs": "error",
+    "indent": ["error", 4]
   }
 }
