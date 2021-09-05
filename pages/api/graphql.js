@@ -1,16 +1,40 @@
 import { gql, ApolloServer } from "apollo-server-micro";
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
+import { google } from 'googleapis';
+import configJson from '../../config.json';
+import secretConfigJson from '../../config.secret.json';
+
+const appConfig = {
+  ...configJson,
+  ...secretConfigJson,
+};
 
 const typeDefs = gql`
   type User {
     id: ID
   }
 
+  type Auth {
+    url: String
+  }
+
   type Query {
       user(id: ID!): User
       currentUser: User
+      auth: Auth
   }
 `;
+
+const oauth2Client = new google.auth.OAuth2(
+  '301960945914-cees61pu2lrafj8nm7e5lbgn1v23oum0.apps.googleusercontent.com',
+  appConfig.GOOGLE_CLIENT_SECRET,
+  'http://localhost:3000/oauth/google',
+);
+const scopes = ['profile'];
+const authUrl = oauth2Client.generateAuthUrl({
+  access_type: 'online',
+  scope: scopes,
+});
 
 const resolvers = {
     Query: {
@@ -22,6 +46,11 @@ const resolvers = {
         currentUser: () => {
             return {
                 id: 'Foo',
+            };
+        },
+        auth: () => {
+            return {
+                url: authUrl,
             };
         },
     },

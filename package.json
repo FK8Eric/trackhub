@@ -11,6 +11,7 @@
   "dependencies": {
     "@apollo/client": "^3.4.10",
     "apollo-server-micro": "^3.3.0",
+    "googleapis": "^85.0.0",
     "graphql": "^15.5.2",
     "micro": "^9.3.4",
     "next": "^11.0.0",
