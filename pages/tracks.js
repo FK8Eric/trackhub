@@ -30,7 +30,7 @@ const Tracks: ComponentType<Props> = () => {
                                 Most popular configuration: CW13
                             </li>
                             <li>
-                                Benchmark laptime: under 2:00 ("sub 2")
+                                Benchmark laptime: under 2:00 (&quot;sub 2&quot;)
                             </li>
                         </ul>
                     </div>
