@@ -60,21 +60,21 @@ const Home: ComponentType<Props> = () => {
             </section>
 
             <style jsx>{`
-        .filters {
-          display: flex;
-          flex-direction: column;
-        }
+                .filters {
+                    display: flex;
+                    flex-direction: column;
+                }
 
-        @media only screen and (min-width: ${desktopWidth}) {
-          .filters {
-            flex-direction: row;
-          }
-        }
+                @media only screen and (min-width: ${desktopWidth}) {
+                    .filters {
+                        flex-direction: row;
+                    }
+                }
 
-        .filter {
-          margin-right: 1em;
-        }
-      `}</style>
+                .filter {
+                    margin-right: 1em;
+                }
+            `}</style>
         </Page>
     );
 };
