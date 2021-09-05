@@ -12,7 +12,7 @@ const handler: RequestHandler = async (req, res) => {
         oauth2Client.setCredentials(tokens);
         let oauth2 = google.oauth2({
             auth: oauth2Client,
-            version: 'v2'
+            version: 'v2',
         });
         let { data } = await oauth2.userinfo.get();
         console.log(data);
