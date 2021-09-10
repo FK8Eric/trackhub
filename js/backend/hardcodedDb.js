@@ -123,6 +123,12 @@ export const mockOrganizers: OrganizerModel[] = [
         name: 'NCRC',
         url: 'https://americanracingclub.com/',
     },
+    {
+        id: 9,
+        humanReadableId: 'speeddistrict',
+        name: 'Speed District',
+        url: 'https://speeddistrict.com/',
+    },
 ];
 
 export const mockOrganizerRegionJoins: OrganizerRegionJoinModel[] = [
@@ -131,4 +137,7 @@ export const mockOrganizerRegionJoins: OrganizerRegionJoinModel[] = [
     { organizerId: 3, regionId: 1 }, // turn8, socal
     { organizerId: 4, regionId: 1 }, // ongrid, socal
     { organizerId: 5, regionId: 2 }, // speedsf, norcal
+    { organizerId: 7, regionId: 1 }, // socaldriversclub, socal
+    { organizerId: 8, regionId: 2 }, // ncrc, norcal
+    { organizerId: 9, regionId: 1 }, // speeddistrict, socal
 ];
