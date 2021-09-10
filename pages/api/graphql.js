@@ -20,6 +20,11 @@ import {
 } from '../../js/backend/repository';
 import type { RequestHandler } from '../../js/backend/types';
 
+const uniqueById = <T: { id: number }>(arr: Array<T>) => {
+    const obj = arr.reduce((acc, element) => ({ ...acc, [element.id]: element }), {});
+    return Object.keys(obj).map(id => obj[id]);
+};
+
 const typeDefs = gql`
     type User {
         id: Int
@@ -60,7 +65,7 @@ const typeDefs = gql`
     }
 
     type EventFilterValue {
-        id: ID
+        valueId: Int
         name: String
         checked: Boolean
     }
@@ -129,13 +134,16 @@ const resolvers = {
         name: async ({ id }, args) => {
             return (await getRegion(id)).name;
         },
-        eventFilters: async ({ id }) => {
+        eventFilters: async (region) => {
+            const events = await getEvents(region.id);
+            const tracks = uniqueById(await Promise.all(events.map(event => getTrack(event.trackId))));
+            const organizers = uniqueById(await Promise.all(events.map(event => getOrganizer(event.organizerId))));
             return [
                 {
                     id: 'tracks',
                     name: 'Tracks',
-                    initialValues: (await getTracks(id)).map(trackModel => ({
-                        id: trackModel.id,
+                    initialValues: tracks.map(trackModel => ({
+                        valueId: trackModel.id,
                         name: trackModel.name,
                         checked: true,
                     })),
@@ -145,15 +153,15 @@ const resolvers = {
                     name: 'Organizers',
                     // TODO: Get additional organizers based on tracks in the region, not just organizers in the region
                     // It is possible for organizers to organize one-off events outside of their usual region
-                    initialValues: (await getOrganizers(id)).map(organizerModel => ({
-                        id: organizerModel.id,
+                    initialValues: organizers.map(organizerModel => ({
+                        valueId: organizerModel.id,
                         name: organizerModel.name,
                         checked: true,
                     })),
                 },
             ];
         },
-        eventArray: async ({ id }, { filters }) => {
+        eventArray: async (region, { filters }) => {
             const processedFilters = (filters || []).map(({ property, constraint }) => {
                 switch (property) {
                 case 'tracks':
@@ -173,7 +181,7 @@ const resolvers = {
                     ...acc,
                     ...filter,
                 }), {});
-            const events = await getEvents(id, processedFilters);
+            const events = await getEvents(region.id, processedFilters);
 
             return events.map(event => ({
                 id: event.id,

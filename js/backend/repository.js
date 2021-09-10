@@ -64,18 +64,32 @@ const mapIcsEventToEventModel = (icsEvent) => {
 export const getEvents = async (regionId: RegionId, {
     organizerIds,
     trackIds,
-}: { organizerIds?: OrganizerId[], trackIds?: TrackId[] }): Promise<EventModel[]> => {
+}: { organizerIds?: OrganizerId[], trackIds?: TrackId[] } = {}): Promise<EventModel[]> => {
     const icsEvents = await getEventsFromIcs();
-    return icsEvents.map(icsEvent => mapIcsEventToEventModel(icsEvent)).filter(event => {
-        if (!event) {
-            return null;
-        }
-        if (!(`${event.trackId}` in trackRegionLookupTable)) {
-            console.log('Event', event, `with trackId ${event.trackId} not found in lookup table`, trackRegionLookupTable);
-            return null;
-        }
-        return event && `${regionId}` in trackRegionLookupTable[`${event.trackId}`];
-    }).filter(event => event);
+    return icsEvents.map(icsEvent => mapIcsEventToEventModel(icsEvent))
+        .filter(event => {
+            if (!event) {
+                return null;
+            }
+            if (!(`${event.trackId}` in trackRegionLookupTable)) {
+                console.log('Event', event, `with trackId ${event.trackId} not found in lookup table`, trackRegionLookupTable);
+                return null;
+            }
+            return event && String(regionId) in trackRegionLookupTable[String(event.trackId)];
+        })
+        .filter(event => event)
+        .filter(event => {
+            if (!organizerIds) {
+                return true;
+            }
+            return organizerIds.includes(String(event.organizerId));
+        })
+        .filter(event => {
+            if (!trackIds) {
+                return true;
+            }
+            return trackIds.includes(String(event.trackId));
+        });
 };
 
 export const getEvent = async (eventId: EventId): Promise<EventModel> => {

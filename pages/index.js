@@ -7,16 +7,19 @@ import { desktopWidth } from '../js/styling';
 import EventFilters from '../js/components/EventFilters';
 
 const GET_UPCOMING_EVENTS_QUERY = gql`
-    query GetUpcomingEvents($regionId: Int!) {
+    query GetUpcomingEvents($regionId: Int!, $filters: [FilterInput]) {
         region(regionId: $regionId) {
-            eventArray(filters: []) {
+            id
+            eventArray(filters: $filters) {
                 id
                 date
                 url
                 track {
+                    id
                     name
                 }
                 organizer {
+                    id
                     name
                 }
             }
@@ -24,16 +27,20 @@ const GET_UPCOMING_EVENTS_QUERY = gql`
     }
 `;
 
-const UpcomingEvents = ({ regionId }) => {
+const UpcomingEvents = ({ regionId, filters }) => {
     const { loading, error, data } = useQuery(GET_UPCOMING_EVENTS_QUERY, {
-        variables: { regionId },
+        variables: { regionId, filters },
     });
     if (error) {
         console.log(error);
         // TODO(error-handling)
         return null;
     }
-    if (loading || !data) {
+    if (loading) {
+        // TODO(loading-handling)
+        return 'I AM LOADING';
+    }
+    if (!data) {
         // TODO(loading-handling)
         return null;
     }
@@ -42,7 +49,11 @@ const UpcomingEvents = ({ regionId }) => {
             <ol className="list-reset">
                 {data.region.eventArray.map(event => (
                     <li key={event.id}>
-                        <a href={event.url} target="_blank" rel="noreferrer"><p>Date: {event.date}, Track: {event.track.name}, Organizer: {event.organizer.name}</p></a>
+                        <p>
+                            <a href={event.url} target="_blank" rel="noreferrer">
+                                Date: {event.date}, Track: {event.track.name}, Organizer: {event.organizer.name}
+                            </a>
+                        </p>
                     </li>
                 ))}
             </ol>
@@ -60,7 +71,7 @@ const Home: ComponentType<Props> = () => {
         <Page title="TrackHub - SoCal">
             <h1>Upcoming HPDE Events</h1>
             <section id="filters" className="filters">
-                {/* <EventFilters regionId={regionId} onChange={newFilters => setFilters(newFilters)} /> */}
+                <EventFilters regionId={regionId} onChange={newFilters => setFilters(newFilters)} />
             </section>
             <section id="upcoming-events">
                 <UpcomingEvents regionId={regionId} filters={filters} />

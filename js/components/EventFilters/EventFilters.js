@@ -3,14 +3,14 @@ import React, { useState, type ComponentType, useEffect } from 'react';
 import { gql, useQuery } from '@apollo/client';
 
 const GET_EVENT_FILTERS_QUERY = gql`
-    query GetEventFilters($regionId: ID!) {
+    query GetEventFilters($regionId: Int!) {
         region(regionId: $regionId) {
             id
             eventFilters {
                 id
                 name
                 initialValues {
-                    id
+                    valueId
                     name
                     checked
                 }
@@ -53,35 +53,42 @@ const EventFilters: ComponentType<Props> = ({ regionId, onChange }) => {
     const { loading, error, data } = useQuery(GET_EVENT_FILTERS_QUERY, {
         variables: { regionId },
     });
+    const updateFilterMap = (newFilterMap) => {
+        setFilterMap(newFilterMap);
+        const newFilterArray = Object.keys(newFilterMap).map(id => newFilterMap[id]).map(filter => ({
+            property: filter.id,
+            constraint: Object.keys(filter.options)
+                .map(id => ({ id: parseInt(id), ...filter.options[String(id)] }))
+                .filter(option => option.checked)
+                .map(option => option.id).join(','),
+        }));
+        onChange(newFilterArray);
+    };
     useEffect(() => {
         if (!data) {
             setFilterMap(null);
+            onChange([]);
             return;
         }
         const newFilterMap = data.region.eventFilters.map(eventFilter => ({
             id: eventFilter.id,
-            options: eventFilter.initialValues.reduce((acc, { id, checked }) => ({
+            options: eventFilter.initialValues.reduce((acc, option) => ({
                 ...acc,
-                [id]: checked,
+                [String(option.valueId)]: {
+                    id: option.valueId,
+                    name: option.name,
+                    checked: option.checked,
+                },
             }), {}),
         })).reduce((acc, filter) => ({
             ...acc,
             [filter.id]: filter,
         }), {});
+        console.log(data);
+        console.log(newFilterMap);
 
-        setFilterMap(newFilterMap);
+        updateFilterMap(newFilterMap);
     }, [data]);
-    useEffect(() => {
-        if (!filterMap) {
-            onChange([]);
-            return;
-        }
-        const newFilterArray = Object.keys(filterMap).map(id => filterMap[id]).map(filter => ({
-            property: filter.id,
-            constraint: Object.keys(filter.options).map(id => ({ id,...filter.options[id] })).filter(option => option.checked).map(option => option.id).join(','),
-        }));
-        onChange(newFilterArray);
-    }, [filterMap, onChange]);
     if (error) {
         console.log(error);
         return null;
@@ -92,19 +99,26 @@ const EventFilters: ComponentType<Props> = ({ regionId, onChange }) => {
 
     return data.region.eventFilters.map(eventFilter =>
         <div className="filter" key={eventFilter.id}>
-            <Filter name={eventFilter.name} options={eventFilter.initialValues.map(({ id, name }) => ({
+            <Filter name={eventFilter.name} options={eventFilter.initialValues.map(({ valueId: id, name }) => ({
                 name,
-                checked: filterMap[eventFilter.id].options[id],
-                onChange: (value) => setFilterMap(({
-                    ...filterMap,
-                    [eventFilter.id]: {
-                        ...filterMap[eventFilter.id],
-                        options: {
-                            ...filterMap[eventFilter.id].options,
-                            [id]: value,
+                checked: filterMap[eventFilter.id].options[String(id)].checked,
+                onChange: (value) => {
+                    const updatedOption = {
+                        ...filterMap[eventFilter.id].options[String(id)],
+                        checked: value,
+                    };
+                    const updatedOptions = {
+                        ...filterMap[eventFilter.id].options,
+                        [String(id)]: updatedOption,
+                    };
+                    updateFilterMap({
+                        ...filterMap,
+                        [eventFilter.id]: {
+                            ...filterMap[eventFilter.id],
+                            options: updatedOptions,
                         },
-                    },
-                })),
+                    });
+                },
             }))} />
         </div>
     );
