@@ -18,7 +18,7 @@ export const authUrl: string = oauth2Client.generateAuthUrl({
 
 export const authenticate = async (idToken: string): any => {
     let oauth2 = google.oauth2({
-        auth: 'AIzaSyDt5EQwRfAzZQAezNCpqK5t_kY-bYhS0WQ',
+        auth: appConfig.GOOGLE_API_KEY,
         version: 'v2',
     });
     const { data } = await oauth2.tokeninfo({ id_token: idToken });
