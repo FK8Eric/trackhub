@@ -11,125 +11,93 @@ import type {
     TrackModel,
     TrackRegionJoinModel,
 } from './models';
+import { getEventsFromIcs } from './events/trackHubCalendar';
+import * as hardcodedDb from './hardcodedDb';
 
-const mockRegions: {[RegionId]:RegionModel} = {
-    socal: {
-        id: 'socal',
-        name: 'SoCal',
+const createLookupTable = (mockTable, keySelector) => mockTable.reduce((acc, row) => ({
+    ...acc,
+    [keySelector(row)]: row,
+}), {});
+const createJoinLookupTable = (mockTable, keySelector, joinKeySelector) => mockTable.reduce((acc, row) => ({
+    ...acc,
+    [keySelector(row)]: {
+        ...acc[keySelector(row)],
+        [joinKeySelector(row)]: row,
     },
-    norcal: {
-        id: 'norcal',
-        name: 'NorCal',
-    },
+}), {});
+
+// $FlowFixMe
+const trackHumanReadableLookupTable = createLookupTable(hardcodedDb.mockTracks, (row) => row.humanReadableId);
+// $FlowFixMe
+const organizerHumanReadableLookupTable = createLookupTable(hardcodedDb.mockOrganizers, (row) => row.humanReadableId);
+// $FlowFixMe
+const trackLookupTable = createLookupTable(hardcodedDb.mockTracks, (row) => `${row.id}`);
+// $FlowFixMe
+const organizerLookupTable = createLookupTable(hardcodedDb.mockOrganizers, (row) => `${row.id}`);
+// $FlowFixMe
+const regionLookupTable = createLookupTable(hardcodedDb.mockRegions, (row) => `${row.id}`);
+// $FlowFixMe
+const trackRegionLookupTable = createJoinLookupTable(hardcodedDb.mockTrackRegionJoins, (row) => `${row.trackId}`, (row) => `${row.regionId}`);
+// $FlowFixMe
+const organizerRegionLookupTable = createJoinLookupTable(hardcodedDb.mockOrganizerRegionJoins, (row) => `${row.organizerId}`, (row) => `${row.regionId}`);
+
+const mapIcsEventToEventModel = (icsEvent) => {
+    if (!(icsEvent.track in trackHumanReadableLookupTable)) {
+        console.log(icsEvent);
+        console.log(`Could not find track with humanReadableId ${icsEvent.track} in lookup table`, trackHumanReadableLookupTable);
+        return null;
+    }
+    if (!(icsEvent.organizer in organizerHumanReadableLookupTable)) {
+        console.log(icsEvent);
+        console.log(`Could not find organizer with humanReadableId ${icsEvent.organizer} in lookup table`, organizerHumanReadableLookupTable);
+        return null;
+    }
+    return {
+        id: icsEvent.id,
+        trackId: trackHumanReadableLookupTable[icsEvent.track].id,
+        organizerId: organizerHumanReadableLookupTable[icsEvent.organizer].id,
+        date: icsEvent.date,
+    };
 };
 
-const mockTracks: {[TrackId]:TrackModel} = {
-    buttonwillow: {
-        id: 'buttonwillow',
-        name: 'Buttonwillow Raceway Park',
-        location: 'Buttonwillow, CA',
-    },
-    streetsofwillow: {
-        id: 'streetsofwillow',
-        name: 'Streets of Willow',
-        location: 'Rosamond, CA',
-    },
-    bigwillow: {
-        id: 'bigwillow',
-        name: 'Big Willow',
-        location: 'Rosamond, CA',
-    },
-    chuckwalla: {
-        id: 'chuckwalla',
-        name: 'Chuckwalla Valley Raceway',
-        location: 'Desert Center, CA',
-    },
-    autoclubspeedway: {
-        id: 'autoclubspeedway',
-        name: 'Auto Club Speedway',
-        location: 'Fontana, CA',
-    },
-};
-
-const mockTrackRegionJoins: TrackRegionJoinModel[] = [
-    { trackId: 'buttonwillow', regionId: 'socal' },
-    { trackId: 'streetsofwillow', regionId: 'socal' },
-    { trackId: 'bigwillow', regionId: 'socal' },
-    { trackId: 'chuckwalla', regionId: 'socal' },
-    { trackId: 'autoclubspeedway', regionId: 'socal' },
-    { trackId: 'buttonwillow', regionId: 'norcal' },
-];
-
-const mockOrganizers: {[OrganizerId]:OrganizerModel} = {
-    speedventures: {
-        id: 'speedventures',
-        name: 'Speed Ventures',
-        url: 'https://www.speedventures.com/',
-    },
-    extremespeedtrackevents: {
-        id: 'extremespeedtrackevents',
-        name: 'Extreme Speed Track Events',
-        url: 'https://www.extremespeedtrackevents.com/',
-    },
-    turn8racing: {
-        id: 'turn8racing',
-        name: 'Turn 8 Racing',
-        url: 'https://www.turn8racing.com/',
-    },
-    ongridtrack: {
-        id: 'ongrid',
-        name: 'OnGrid Track',
-        url: 'https://www.ongridtrack.com/',
-    },
-    speedsf: {
-        id: 'speedsf',
-        name: 'SpeedSF',
-        url: 'https://www.speedsf.com/',
-    },
-};
-
-const mockOrganizerRegionJoins: OrganizerRegionJoinModel[] = [
-    { organizerId: 'speedventures', regionId: 'socal' },
-    { organizerId: 'extremespeedtrackevents', regionId: 'socal' },
-    { organizerId: 'turn8racing', regionId: 'socal' },
-    { organizerId: 'ongridtrack', regionId: 'socal' },
-    { organizerId: 'speedsf', regionId: 'norcal' },
-];
-
-const mockEvents: {[string]: EventModel} = {
-    '1': {
-        id: 1,
-        trackId: 'buttonwillow',
-        organizerId: 'speedventures',
-        date: new Date('2021-09-05'),
-    },
-};
-
-export const getEvents = (regionId: RegionId, {
+export const getEvents = async (regionId: RegionId, {
     organizerIds,
     trackIds,
-}: { organizerIds?: OrganizerId[], trackIds?: TrackId[]}): EventModel[] => {
-    return [mockEvents['1']];
+}: { organizerIds?: OrganizerId[], trackIds?: TrackId[] }): Promise<EventModel[]> => {
+    const icsEvents = await getEventsFromIcs();
+    return icsEvents.map(icsEvent => mapIcsEventToEventModel(icsEvent)).filter(event => {
+        if (!event) {
+            return null;
+        }
+        if (!(`${event.trackId}` in trackRegionLookupTable)) {
+            console.log('Event', event, `with trackId ${event.trackId} not found in lookup table`, trackRegionLookupTable);
+            return null;
+        }
+        return event && `${regionId}` in trackRegionLookupTable[`${event.trackId}`];
+    }).filter(event => event);
 };
 
-export const getEvent = (eventId: EventId): EventModel => mockEvents[`${eventId}`];
-
-export const getTracks = (regionId: RegionId): TrackModel[] => {
-    const trackIds = mockTrackRegionJoins.filter((join) => join.regionId === regionId).map(({ trackId }) => trackId);
-    return trackIds.map(trackId => mockTracks[trackId]);
+export const getEvent = async (eventId: EventId): Promise<EventModel> => {
+    const icsEvents = await getEventsFromIcs();
+    return icsEvents.map(icsEvent => mapIcsEventToEventModel(icsEvent)).filter(event => event && event.id === eventId)[0];
 };
 
-export const getTrack = (trackId: TrackId): TrackModel => mockTracks[trackId];
-
-export const getOrganizers = (regionId: RegionId): OrganizerModel[] => {
-    const organizerIds = mockOrganizerRegionJoins.filter((join) => join.regionId === regionId).map(({ organizerId }) => organizerId);
-    return organizerIds.map(organizerId => mockOrganizers[organizerId]);
+export const getTracks = async (regionId: RegionId): Promise<TrackModel[]> => {
+    const trackIds = hardcodedDb.mockTrackRegionJoins.filter((join) => join.regionId === regionId).map(({ trackId }) => trackId);
+    return trackIds.map(trackId => trackLookupTable[`${trackId}`]);
 };
 
-export const getOrganizer = (organizerId: OrganizerId): OrganizerModel => mockOrganizers[organizerId];
+export const getTrack = async (trackId: TrackId): Promise<TrackModel> => trackLookupTable[`${trackId}`];
 
-export const getRegions = (): RegionModel[] => {
-    return Object.keys(mockRegions).map(regionId => mockRegions[regionId]);
+export const getOrganizers = async (regionId: RegionId): Promise<OrganizerModel[]> => {
+    const organizerIds = hardcodedDb.mockOrganizerRegionJoins.filter((join) => join.regionId === regionId).map(({ organizerId }) => organizerId);
+    return organizerIds.map(organizerId => organizerLookupTable[`${organizerId}`]);
 };
 
-export const getRegion = (regionId: RegionId): RegionModel => mockRegions[regionId];
+export const getOrganizer = async (organizerId: OrganizerId): Promise<OrganizerModel> => organizerLookupTable[`${organizerId}`];
+
+export const getRegions = async (): Promise<RegionModel[]> => {
+    return hardcodedDb.mockRegions;
+};
+
+export const getRegion = async (regionId: RegionId): Promise<RegionModel> => regionLookupTable[`${regionId}`];

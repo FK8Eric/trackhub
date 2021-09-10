@@ -1,7 +1,7 @@
 // @flow
 import { type ComponentType, useEffect } from 'react';
 
-type Props = {}
+type Props = {};
 
 const Google: ComponentType<Props> = () => {
     useEffect(() => {

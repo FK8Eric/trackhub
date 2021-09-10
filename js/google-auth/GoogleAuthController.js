@@ -32,7 +32,7 @@ type Props = {
 type AuthState = {
     gapi: any,
     googleAuth: GoogleAuth,
-}
+};
 
 const GoogleAuthController: ComponentType<Props> = ({ children }) => {
     const stateContext = useContext(StateContext);

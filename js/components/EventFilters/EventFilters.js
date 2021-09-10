@@ -41,12 +41,12 @@ const Filter = ({ name, options }) => {
 type ComputedFilter = {
     property: string,
     constraint: string,
-}
+};
 
 type Props = {
-    regionId: string,
+    regionId: number,
     onChange: (ComputedFilter[]) => void
-}
+};
 
 const EventFilters: ComponentType<Props> = ({ regionId, onChange }) => {
     const [filterMap, setFilterMap] = useState(null);

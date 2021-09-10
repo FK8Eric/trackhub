@@ -1,6 +1,6 @@
 {
   "extends": ["next"],
-  "plugins": ["react"],
+  "plugins": ["react", "eslint-plugin-flowtype"],
   "rules": {
     "semi": ["error", "always"],
     "jsx-quotes": ["error", "prefer-double"],
@@ -13,6 +13,11 @@
     "react/jsx-uses-react": "error",
     "react/jsx-uses-vars": "error",
     "no-unused-vars": ["warn", { "varsIgnorePattern": "^_", "argsIgnorePattern": "(^_)|(^args$)|(^parent$)" }],
-    "comma-dangle": ["error", "always-multiline"]
+    "comma-dangle": ["error", "always-multiline"],
+    "key-spacing": ["error"],
+    "flowtype/object-type-curly-spacing": ["error", "always"],
+    "flowtype/space-after-type-colon": ["error"],
+    "flowtype/space-before-type-colon": ["error"],
+    "flowtype/semi": ["error", "always"]
   }
 }

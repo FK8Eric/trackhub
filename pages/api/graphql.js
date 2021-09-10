@@ -6,6 +6,9 @@ import {
     authenticate,
 } from '../../js/backend/oauth/google';
 import {
+    getEventsFromIcs,
+} from '../../js/backend/events/trackHubCalendar';
+import {
     getEvent,
     getEvents,
     getOrganizer,
@@ -19,7 +22,7 @@ import type { RequestHandler } from '../../js/backend/types';
 
 const typeDefs = gql`
     type User {
-        id: ID
+        id: Int
     }
 
     type AuthResult {
@@ -32,7 +35,7 @@ const typeDefs = gql`
     }
 
     type Track {
-        id: ID
+        id: Int
         name: String
         location: String
     }
@@ -43,13 +46,13 @@ const typeDefs = gql`
     }
 
     type Organizer {
-        id: ID
+        id: Int
         name: String
         url: String
     }
 
     type Event {
-        id: ID
+        id: Int
         track: Track
         organizer: Organizer
         date: String
@@ -68,7 +71,7 @@ const typeDefs = gql`
     }
 
     type Region {
-        id: ID
+        id: Int
         name: String
 
         eventFilters: [EventFilter]
@@ -78,18 +81,18 @@ const typeDefs = gql`
     }
 
     type Query {
-        user(id: ID!): User
+        user(id: Int!): User
         currentUser: User
         auth: Auth
         regions(filters: [FilterInput]): [Region]
-        region(regionId: ID): Region
+        region(regionId: Int!): Region
     }
 `;
 
 const resolvers = {
     Event: {
-        date: (parent, args) => {
-            return getEvent(parent.id).date.toISOString().split('T')[0];
+        date: async (parent, args) => {
+            return (await getEvent(parent.id)).date.toISOString().split('T')[0];
         },
     },
     Auth: {
@@ -103,31 +106,31 @@ const resolvers = {
         },
     },
     Track: {
-        name: ({ id }, args) => {
-            return getTrack(id).name;
+        name: async ({ id }, args) => {
+            return (await getTrack(id)).name;
         },
-        location: ({ id }, args) => {
-            return getTrack(id).location;
+        location: async ({ id }, args) => {
+            return (await getTrack(id)).location;
         },
     },
     Organizer: {
-        name: ({ id }, args) => {
-            return getOrganizer(id).name;
+        name: async ({ id }, args) => {
+            return (await getOrganizer(id)).name;
         },
-        url: ({ id }, args) => {
-            return getOrganizer(id).url;
+        url: async ({ id }, args) => {
+            return (await getOrganizer(id)).url;
         },
     },
     Region: {
-        name: ({ id }, args) => {
-            return getRegion(id).name;
+        name: async ({ id }, args) => {
+            return (await getRegion(id)).name;
         },
-        eventFilters: ({ id }) => {
+        eventFilters: async ({ id }) => {
             return [
                 {
                     id: 'tracks',
                     name: 'Tracks',
-                    initialValues: getTracks(id).map(trackModel => ({
+                    initialValues: (await getTracks(id)).map(trackModel => ({
                         id: trackModel.id,
                         name: trackModel.name,
                         checked: true,
@@ -138,7 +141,7 @@ const resolvers = {
                     name: 'Organizers',
                     // TODO: Get additional organizers based on tracks in the region, not just organizers in the region
                     // It is possible for organizers to organize one-off events outside of their usual region
-                    initialValues: getOrganizers(id).map(organizerModel => ({
+                    initialValues: (await getOrganizers(id)).map(organizerModel => ({
                         id: organizerModel.id,
                         name: organizerModel.name,
                         checked: true,
@@ -146,8 +149,8 @@ const resolvers = {
                 },
             ];
         },
-        eventArray:({ id }, { filters }) => {
-            const processedFilters = filters.map(({ property, constraint }) => {
+        eventArray: async ({ id }, { filters }) => {
+            const processedFilters = (filters || []).map(({ property, constraint }) => {
                 switch (property) {
                 case 'tracks':
                     return {
@@ -166,7 +169,7 @@ const resolvers = {
                     ...acc,
                     ...filter,
                 }), {});
-            const events = getEvents(id, processedFilters);
+            const events = await getEvents(id, processedFilters);
 
             return events.map(event => ({
                 id: event.id,
@@ -174,11 +177,11 @@ const resolvers = {
                 organizer: { id: event.organizerId },
             }));
         },
-        organizers: (region, args) => {
-            return getOrganizers(region.id).map(({ id }) => ({ id }));
+        organizers: async (region, args) => {
+            return (await getOrganizers(region.id)).map(({ id }) => ({ id }));
         },
-        tracks: (region, args) => {
-            return getTracks(region.id).map(({ id }) => ({ id }));
+        tracks: async (region, args) => {
+            return (await getTracks(region.id)).map(({ id }) => ({ id }));
         },
     },
     Query: {
@@ -187,7 +190,8 @@ const resolvers = {
                 id,
             };
         },
-        currentUser: () => {
+        currentUser: async () => {
+            await getEventsFromIcs();
             return {
                 id: 'Foo',
             };
@@ -197,8 +201,8 @@ const resolvers = {
                 url: authUrl,
             };
         },
-        regions: (parent, args) => {
-            return getRegions().map(({ id }) => ({ id }));
+        regions: async (parent, args) => {
+            return (await getRegions()).map(({ id }) => ({ id }));
         },
         region: (parent, { regionId }) => {
             return { id: regionId };

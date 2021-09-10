@@ -7,29 +7,23 @@ import { desktopWidth } from '../js/styling';
 import EventFilters from '../js/components/EventFilters';
 
 const GET_UPCOMING_EVENTS_QUERY = gql`
-    query GetUpcomingEvents($regionId: ID!) {
+    query GetUpcomingEvents($regionId: Int!) {
         region(regionId: $regionId) {
-            id
-            organizers {
-                id
-                name
-                url
-            }
-            tracks {
-                id
-                name
-            }
             eventArray(filters: []) {
                 id
+                date
                 track {
-                    id
+                    name
+                }
+                organizer {
+                    name
                 }
             }
         }
     }
 `;
 
-const UpcomingEvents = ({ events: _events, regionId }) => {
+const UpcomingEvents = ({ regionId }) => {
     const { loading, error, data } = useQuery(GET_UPCOMING_EVENTS_QUERY, {
         variables: { regionId },
     });
@@ -44,8 +38,12 @@ const UpcomingEvents = ({ events: _events, regionId }) => {
     }
     return (
         <>
-            {data && JSON.stringify(data, null, '\t')}
             <ol className="list-reset">
+                {data.region.eventArray.map(event => (
+                    <li key={event.id}>
+                        <p>Date: {event.date}, Track: {event.track.name}, Organizer: {event.organizer.name}</p>
+                    </li>
+                ))}
             </ol>
         </>
     );
@@ -54,17 +52,17 @@ const UpcomingEvents = ({ events: _events, regionId }) => {
 type Props = {};
 
 const Home: ComponentType<Props> = () => {
-    const regionId = 'socal';
+    const regionId = 1;
     const [filters, setFilters] = useState([]);
 
     return (
         <Page title="TrackHub - SoCal">
             <h1>Upcoming HPDE Events</h1>
             <section id="filters" className="filters">
-                <EventFilters regionId={regionId} onChange={newFilters => setFilters(newFilters)} />
+                {/* <EventFilters regionId={regionId} onChange={newFilters => setFilters(newFilters)} /> */}
             </section>
             <section id="upcoming-events">
-                <UpcomingEvents events={[]} regionId={regionId} filters={filters} />
+                <UpcomingEvents regionId={regionId} filters={filters} />
             </section>
 
             <style jsx>{`

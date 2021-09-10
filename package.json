@@ -12,12 +12,13 @@
   },
   "dependencies": {
     "@apollo/client": "^3.4.10",
-    "apollo-server-micro": "^3.3.0",
     "apollo-server-core": "^3.3.0",
+    "apollo-server-micro": "^3.3.0",
     "googleapis": "^85.0.0",
     "graphql": "^15.5.2",
     "micro": "^9.3.4",
     "next": "^11.0.0",
+    "node-ical": "^0.13.0",
     "react": "17.0.2",
     "react-dom": "17.0.2"
   },
@@ -25,6 +26,7 @@
     "babel-plugin-transform-flow-strip-types": "6.22.0",
     "eslint": "7.30.0",
     "eslint-config-next": "latest",
+    "eslint-plugin-flowtype": "^5.9.2",
     "eslint-plugin-react": "^7.25.1",
     "flow-bin": "^0.159.0"
   }
