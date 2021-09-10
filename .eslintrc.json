@@ -1,5 +1,6 @@
 {
   "extends": ["next"],
+  "ignorePatterns": ["apollo-client.js"],
   "plugins": ["react", "eslint-plugin-flowtype"],
   "rules": {
     "semi": ["error", "always"],
