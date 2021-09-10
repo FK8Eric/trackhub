@@ -56,6 +56,7 @@ const typeDefs = gql`
         track: Track
         organizer: Organizer
         date: String
+        url: String
     }
 
     type EventFilterValue {
@@ -93,6 +94,9 @@ const resolvers = {
     Event: {
         date: async (parent, args) => {
             return (await getEvent(parent.id)).date.toISOString().split('T')[0];
+        },
+        url: async (parent, args) => {
+            return (await getEvent(parent.id)).url;
         },
     },
     Auth: {

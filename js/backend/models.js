@@ -25,6 +25,7 @@ export type EventModel = {
     trackId: TrackId,
     organizerId: OrganizerId,
     date: Date,
+    url: string,
 };
 
 export type RegionId = number;

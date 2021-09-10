@@ -12,6 +12,7 @@ const GET_UPCOMING_EVENTS_QUERY = gql`
             eventArray(filters: []) {
                 id
                 date
+                url
                 track {
                     name
                 }
@@ -41,7 +42,7 @@ const UpcomingEvents = ({ regionId }) => {
             <ol className="list-reset">
                 {data.region.eventArray.map(event => (
                     <li key={event.id}>
-                        <p>Date: {event.date}, Track: {event.track.name}, Organizer: {event.organizer.name}</p>
+                        <a href={event.url} target="_blank" rel="noreferrer"><p>Date: {event.date}, Track: {event.track.name}, Organizer: {event.organizer.name}</p></a>
                     </li>
                 ))}
             </ol>

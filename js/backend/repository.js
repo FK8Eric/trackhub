@@ -57,6 +57,7 @@ const mapIcsEventToEventModel = (icsEvent) => {
         trackId: trackHumanReadableLookupTable[icsEvent.track].id,
         organizerId: organizerHumanReadableLookupTable[icsEvent.organizer].id,
         date: icsEvent.date,
+        url: icsEvent.url,
     };
 };
 
