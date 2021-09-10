@@ -11,8 +11,8 @@ import type {
     TrackModel,
     TrackRegionJoinModel,
 } from './models';
-import { getEventsFromIcs } from './events/trackHubCalendar';
 import * as hardcodedDb from './hardcodedDb';
+import { mockEvents } from './hardcodedDb';
 
 const createLookupTable = (mockTable, keySelector) => mockTable.reduce((acc, row) => ({
     ...acc,
@@ -65,8 +65,7 @@ export const getEvents = async (regionId: RegionId, {
     organizerIds,
     trackIds,
 }: { organizerIds?: OrganizerId[], trackIds?: TrackId[] } = {}): Promise<EventModel[]> => {
-    const icsEvents = await getEventsFromIcs();
-    return icsEvents.map(icsEvent => mapIcsEventToEventModel(icsEvent))
+    return mockEvents
         .filter(event => {
             if (!event) {
                 return null;
@@ -93,8 +92,7 @@ export const getEvents = async (regionId: RegionId, {
 };
 
 export const getEvent = async (eventId: EventId): Promise<EventModel> => {
-    const icsEvents = await getEventsFromIcs();
-    return icsEvents.map(icsEvent => mapIcsEventToEventModel(icsEvent)).filter(event => event && event.id === eventId)[0];
+    return mockEvents.filter(event => event && event.id === eventId)[0];
 };
 
 export const getTracks = async (regionId: RegionId): Promise<TrackModel[]> => {

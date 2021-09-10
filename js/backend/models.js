@@ -15,7 +15,14 @@ export type TrackModel = {
     id: TrackId,
     humanReadableId: string,
     name: string,
-    location: string
+    location: string,
+};
+
+export type TrackConfigurationModel = {
+    id: number,
+    trackId: TrackId,
+    humanReadableId: string,
+    name: string,
 };
 
 export type EventId = number;
@@ -23,6 +30,7 @@ export type EventId = number;
 export type EventModel = {
     id: EventId,
     trackId: TrackId,
+    configurationId?: ?number,
     organizerId: OrganizerId,
     date: Date,
     url: string,
