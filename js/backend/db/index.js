@@ -9,6 +9,9 @@ const pool = new Pool({
 })
 
 module.exports = {
+    // Usage
+    // text: main query body, for example 'INSER INTO users(name, email) VALUES ($1, $2)'
+    // params: substitution into the query, e.g. ['john doe', 'jd@email.com']
     async query(text, params) {
       const start = Date.now()
       const res = await pool.query(text, params)
